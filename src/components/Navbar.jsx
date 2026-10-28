@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import "./Navbar.css";
+import { Link, NavLink } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ userName }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -27,21 +27,7 @@ function Navbar() {
                         <img src="/images/logo.png" alt="ShopKart" className="shopkart-logo" />
                     </Link>
 
-                    {/* All Categories Dropdown */}
-                    <div className="dropdown category-dropdown">
-                        <button className="category-btn dropdown-toggle" type="button">
-                            All Categories
-                        </button>
 
-                        <ul className="dropdown-menu">
-                            <li><a className="dropdown-item" href="#">Electronics</a></li>
-                            <li><a className="dropdown-item" href="#">Fashion</a></li>
-                            <li><a className="dropdown-item" href="#">Home & Kitchen</a></li>
-                            <li><a className="dropdown-item" href="#">Beauty & Personal Care</a></li>
-                            <li><a className="dropdown-item" href="#">Sports & Fitness</a></li>
-                            <li><a className="dropdown-item" href="#">Books & Stationery</a></li>
-                        </ul>
-                    </div>
 
                     {/* Mobile Toggle */}
                     <button className="navbar-toggler" type="button" onClick={toggleMenu}>
@@ -51,11 +37,11 @@ function Navbar() {
                     {/* Navigation */}
                     <div className={`navbar-collapse ${isMenuOpen ? 'active' : ''}`} id="shopKartNavbar">
                         <ul className="navbar-nav main-nav">
-                            <li className="nav-item"><Link className="nav-link active" to="/">Home</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/product">Products</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="#">Deals</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="#">About Us</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="#">Contact</Link></li>
+                            <li className="nav-item"><NavLink className="nav-link" to="/"> Home </NavLink></li>
+                            <li className="nav-item"><NavLink className="nav-link" to="/product"> Products </NavLink></li>
+                            <li className="nav-item"><NavLink className="nav-link" to="/about"> About </NavLink></li>
+                            <li className="nav-item"><NavLink className="nav-link" to="/contact"> Contact </NavLink></li>
+                            <li className="nav-item"><NavLink className="nav-link" to="/cart"> Cart </NavLink></li>
                         </ul>
 
                         {/* Search */}
@@ -66,11 +52,42 @@ function Navbar() {
 
                         {/* Icons */}
                         <div className="nav-actions">
-                            <span className="nav-icon">❤️</span>
+
 
                             <div className="cart-wrapper">
                                 <Link to="/cart" className="nav-icon">🛒</Link>
                                 <span className="cart-count">0</span>
+                            </div>
+                            {/* Account / Greeting */}
+                            {userName ? (
+                                <span className="user-greeting">
+                                    <img src="/icons/profile-icon.png" alt="Profile" className="greeting-profile-icon" />
+                                    Hello, {userName}
+                                </span>
+                            ) : (
+                                <div className="dropdown account-dropdown">
+                                    <button className="account-btn" type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false" aria-label="My Account">
+                                        <img src="/icons/profile-icon-2.png" alt="My Account" className="profile-icon" />
+                                    </button>
+
+                                    <ul className="dropdown-menu account-menu">
+                                        <li><a className="dropdown-item" href="/login">Login</a></li>
+                                        <li><a className="dropdown-item" href="/register">Register</a></li>
+                                    </ul>
+                                </div>
+                            )}
+                            <div className="dropdown account-dropdown">
+                                
+
+                                <ul className="dropdown-menu account-menu">
+
+                                    <li> <Link className="dropdown-item" to="/login"> Login </Link> </li>
+
+                                    <li><Link className="dropdown-item" to="/register"> Register </Link>                                    </li>
+
+                                </ul>
+
                             </div>
                         </div>
                     </div>

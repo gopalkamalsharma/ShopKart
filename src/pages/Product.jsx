@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
+
 import "./Product.css";
 
 const products = [
@@ -202,7 +202,7 @@ function Product() {
 
   return (
     <>
-      <Navbar />
+      
 
       <main className="products-page">
         <section className="products-banner">
