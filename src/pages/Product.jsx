@@ -149,7 +149,7 @@ const products = [
   }
 ];
 
-function Product() {
+function Product({ dispatch }) {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [maxPrice, setMaxPrice] = useState(20000);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -202,7 +202,7 @@ function Product() {
 
   return (
     <>
-      
+
 
       <main className="products-page">
         <section className="products-banner">
@@ -222,56 +222,56 @@ function Product() {
             <div className="filter-group">
               <h4>Categories</h4>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedCategories.includes("Electronics")}
-                  onChange={() => handleCategoryChange("Electronics")} 
-                /> Electronics 
+                  onChange={() => handleCategoryChange("Electronics")}
+                /> Electronics
               </label>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedCategories.includes("Fashion")}
-                  onChange={() => handleCategoryChange("Fashion")} 
-                /> Fashion 
+                  onChange={() => handleCategoryChange("Fashion")}
+                /> Fashion
               </label>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedCategories.includes("Home & Kitchen")}
-                  onChange={() => handleCategoryChange("Home & Kitchen")} 
-                /> Home & Kitchen 
+                  onChange={() => handleCategoryChange("Home & Kitchen")}
+                /> Home & Kitchen
               </label>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedCategories.includes("Beauty")}
-                  onChange={() => handleCategoryChange("Beauty")} 
-                /> Beauty 
+                  onChange={() => handleCategoryChange("Beauty")}
+                /> Beauty
               </label>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedCategories.includes("Sports")}
-                  onChange={() => handleCategoryChange("Sports")} 
-                /> Sports 
+                  onChange={() => handleCategoryChange("Sports")}
+                /> Sports
               </label>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedCategories.includes("Books")}
-                  onChange={() => handleCategoryChange("Books")} 
-                /> Books 
+                  onChange={() => handleCategoryChange("Books")}
+                /> Books
               </label>
             </div>
 
             <div className="filter-group">
               <h4>Price Range</h4>
-              <input 
-                type="range" 
-                min="199" 
+              <input
+                type="range"
+                min="199"
                 max="20000"
-                value={maxPrice} 
+                value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
               />
               <div className="price-range">
@@ -283,24 +283,24 @@ function Product() {
             <div className="filter-group">
               <h4>Ratings</h4>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedRating === 5}
-                  onChange={() => handleRatingChange(5)} 
+                  onChange={() => handleRatingChange(5)}
                 /> ⭐⭐⭐⭐⭐ & above
               </label>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedRating === 4}
-                  onChange={() => handleRatingChange(4)} 
+                  onChange={() => handleRatingChange(4)}
                 /> ⭐⭐⭐⭐☆ & above
               </label>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={selectedRating === 3}
-                  onChange={() => handleRatingChange(3)} 
+                  onChange={() => handleRatingChange(3)}
                 /> ⭐⭐⭐☆☆ & above
               </label>
             </div>
@@ -308,17 +308,17 @@ function Product() {
             <div className="filter-group">
               <h4>Availability</h4>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={availability === "inStock"}
-                  onChange={() => handleAvailabilityChange("inStock")} 
+                  onChange={() => handleAvailabilityChange("inStock")}
                 /> In Stock
               </label>
               <label>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={availability === "outOfStock"}
-                  onChange={() => handleAvailabilityChange("outOfStock")} 
+                  onChange={() => handleAvailabilityChange("outOfStock")}
                 /> Out of Stock
               </label>
             </div>
@@ -351,7 +351,9 @@ function Product() {
                         ₹{product.price}
                         <del>₹{product.originalPrice}</del>
                       </div>
-                      <button className="add-cart-button">🛒 Add to Cart</button>
+                      <button className="add-cart-button" onClick={() => {
+                        dispatch({ type: "ADD_ITEM", payload: product });
+                      }}>🛒 Add to Cart</button>
                     </div>
                   </div>
                 ))

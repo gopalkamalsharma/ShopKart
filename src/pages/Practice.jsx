@@ -1,46 +1,45 @@
 import { useForm } from "react-hook-form"
+import { useReducer } from "react";
+
+function reducer(state, action) {
+  if (action.type === 'incremented_count') {
+    return {
+      count: state.count + 1
+    };
+  }else if(action.type === "decrement_count"){
+    return{
+        count: state.count - 1
+    };
+  }
+  else if(action.type === "clear"){
+    return{
+        count: 0
+    };
+  }
+  throw Error('Unknown action.');
+}
+
 export default function Practice() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm()
+    const [state, dispatch] = useReducer(reducer, { count: 0 });
     return (
-        <div>
-            <form onSubmit={handleSubmit(console.log)}>
-                <input 
-                {...register("firstName", 
-                    { 
-                        required: {value: true, message:"This field is mandatory"}, 
-                        minLength:{value: 3, message:"Minimum characters required 3"}
-                    }
-                )}
-                />
-                <p>{errors.firstName?.message}</p>
-                <input 
-                {...register("lastName", 
-                    { 
-                        required: {value: true, message: "This field is mandatory"}, 
-                        maxLength: {value:10, message: "Maximum allowed character is 10"}
-                    }
-                )}
-                />
-                <p>{errors.lastName?.message}</p>
-                <input 
-                {...register("emailAddress", 
-                    { 
-                        required: { value: true, message: "This field is mandatory" }, 
-                        pattern: {
-                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                            message: "Please enter a valid email address"
-                        }
-                    }
-                )}
-                />
-                <p>{errors.emailAddress?.message}</p>
-                <button>Submit</button>
-            </form>
-        </div>
+        <>
+            <button onClick={() => {
+                dispatch({ type: 'incremented_count' })
+            }}>
+                Increment count
+            </button>
+            <p>{state.count}.</p>
+            <button onClick={() => {
+                dispatch({ type: 'decrement_count' })
+            }}>
+                Decrement count
+            </button>
+            <button onClick={() => {
+                dispatch({ type: 'clear' })
+            }}>
+                Clear
+            </button>
+        </>
 
     );
 }
