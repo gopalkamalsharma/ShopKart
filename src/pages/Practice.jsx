@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import {setItem, getItem} from '../utils/localStorage'
 export default function Practice() {
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(()=>{
+        const item = getItem("count");
+        return item || 0;
+    });
 
     useEffect(()=>{
         setItem('count', count)
