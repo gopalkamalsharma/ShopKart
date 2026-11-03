@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./Product.css";
 
@@ -154,6 +155,8 @@ function Product({ dispatch }) {
   const [maxPrice, setMaxPrice] = useState(20000);
   const [selectedRating, setSelectedRating] = useState(0);
   const [availability, setAvailability] = useState("");
+  const navigate = useNavigate();
+  const [addedProductId, setAddedProductId] = useState(null);
 
   const handleCategoryChange = (category) => {
     if (selectedCategories.includes(category)) {
@@ -332,28 +335,56 @@ function Product({ dispatch }) {
             <div className="products-grid">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (
-                  <div className="product-card" key={product.id}>
-                    <div className="product-image">
+                  <div className="product-card" key={product.id} title="Click for more info">
+
+                    <div
+                      className="product-image"
+                      onClick={() => navigate(`/product/${product.id}`)} >
                       {product.discount && (
-                        <span className="discount-badge">-{product.discount}</span>
+                        <span className="discount-badge"> -{product.discount} </span>
                       )}
-                      <button className="wishlist-button">♡</button>
+                      <button className="wishlist-button" onClick={(e) => e.stopPropagation()} >
+                        ♡
+                      </button>
+
                       <img src={product.image} alt={product.name} />
                     </div>
-                    <div className="product-info">
+
+                    <div className="product-info" onClick={() => navigate(`/product/${product.id}`)}>
                       <small>{product.category}</small>
+
                       <h3>{product.name}</h3>
+
                       <div className="rating">
-                        ⭐ {product.rating}
-                        <span> ({product.reviews})</span>
+                        ⭐ {product.rating} <span>({product.reviews})</span>
                       </div>
+
                       <div className="product-price">
-                        ₹{product.price}
-                        <del>₹{product.originalPrice}</del>
+                        ₹{product.price} <del>₹{product.originalPrice}</del>
                       </div>
-                      <button className="add-cart-button" onClick={() => {
-                        dispatch({ type: "ADD_ITEM", payload: product });
-                      }}>🛒 Add to Cart</button>
+
+                      <button
+                        className="add-cart-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+
+                          dispatch({
+                            type: "ADD_ITEM",
+                            payload: product
+                          });
+                          setAddedProductId(product.id);
+
+                          setTimeout(() => {
+                            setAddedProductId(null);
+                          }, 2000);
+                        }}
+                      >
+                        {addedProductId === product.id ? (
+                          <>✓ Added to Cart</>
+                        ) : (
+                          <>🛒 Add to Cart</>
+                        )}
+                      </button>
                     </div>
                   </div>
                 ))

@@ -1,5 +1,5 @@
 
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useParams } from "react-router-dom";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
@@ -8,6 +8,11 @@ import Practice from "./pages/Practice";
 import Register from "./pages/Register";
 import React, { useState, useReducer } from "react";
 import Navbar from "./components/Navbar";
+import About from "./pages/About";
+import Footer from "./components/Footer";
+import Contact from "./pages/Contact";
+import ProductDetails from "./pages/ProductDetails";
+import NotFound from "./pages/NotFound";
 
 function cartReducer(state, action) {
   switch (action.type) {
@@ -76,6 +81,7 @@ function App() {
   const navigate = useNavigate();
 
   const [cart, dispatch] = useReducer(cartReducer, []);
+  
   return (
 
     <>
@@ -87,7 +93,13 @@ function App() {
         <Route path="/login" element={<Login setUserName={setUserName} />} />
         <Route path="/register" element={<Register setUserName={setUserName} />} />
         <Route path="/practice" element={<Practice />} />
+        <Route path="/about" element={<About />}/>
+        <Route path="/contact" element={<Contact />}/>
+        <Route path="/product/:id" element={<ProductDetails dispatch={dispatch} />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer/>
+
     </>
   );
 
