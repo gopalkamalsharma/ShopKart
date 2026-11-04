@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./Product.css";
@@ -157,6 +157,7 @@ function Product({ dispatch }) {
   const [availability, setAvailability] = useState("");
   const navigate = useNavigate();
   const [addedProductId, setAddedProductId] = useState(null);
+  const [sortOption, setSortOption] = useState("");
 
   const handleCategoryChange = (category) => {
     if (selectedCategories.includes(category)) {
@@ -203,6 +204,46 @@ function Product({ dispatch }) {
     );
   });
 
+  let sortedProducts = [...filteredProducts];
+  if (sortOption === "price-low") {
+    sortedProducts.sort(
+      (a, b) =>
+        Number(String(a.price).replace(/,/g, "")) -
+        Number(String(b.price).replace(/,/g, ""))
+    );
+  }
+
+
+  if (sortOption === "price-high") {
+    sortedProducts.sort(
+      (a, b) =>
+        Number(String(b.price).replace(/,/g, "")) -
+        Number(String(a.price).replace(/,/g, ""))
+    );
+  }
+
+  if (sortOption === "rating-high") {
+    sortedProducts.sort((a, b) => b.rating - a.rating);
+  }
+
+  if (sortOption === "rating-low") {
+    sortedProducts.sort((a, b) => a.rating - b.rating);
+  }
+
+  if (sortOption === "popular") {
+    sortedProducts.sort(
+      (a, b) => b.reviews - a.reviews
+    );
+  }
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
+  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const currentProducts = sortedProducts.slice(startIndex, endIndex);
+  useEffect(() => {setCurrentPage(1);}, [sortOption]);
+   useEffect(() => {setCurrentPage(1);}, [selectedCategories,maxPrice,selectedRating,availability]);
   return (
     <>
 
@@ -214,9 +255,24 @@ function Product({ dispatch }) {
             <p> Explore our wide range of top quality products </p>
           </div>
         </section>
+        <div className="sort-section">
+
+          <label htmlFor="sort">Sort By:</label>
+
+          <select id="sort" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+            <option value="">Default</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating-high">Rating: High to Low</option>
+            <option value="rating-low">Rating: Low to High</option>
+            <option value="popular">Most Popular</option>
+          </select>
+
+        </div>
 
         <section className="products-content">
           <aside className="filter-sidebar">
+
             <div className="filter-title">
               <h3>FILTERS</h3>
               <button onClick={clearFilters}>Clear All</button>
@@ -333,8 +389,8 @@ function Product({ dispatch }) {
             </div>
 
             <div className="products-grid">
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
+              {sortedProducts.length > 0 ? (
+                currentProducts.map((product) => (
                   <div className="product-card" key={product.id} title="Click for more info">
 
                     <div
@@ -395,6 +451,26 @@ function Product({ dispatch }) {
                 </div>
               )}
             </div>
+            {totalPages > 1 && (
+              <div className="pagination">
+                <button onClick={() => setCurrentPage((previous) => Math.max(previous - 1, 1))}
+                  disabled={currentPage === 1}> ← </button>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button key={index + 1} className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => setCurrentPage(index + 1)}>
+                    {index + 1}
+                  </button>
+                ))}
+
+
+                <button onClick={() => setCurrentPage((previous) =>
+                  Math.min(previous + 1, totalPages))}
+                  disabled={currentPage === totalPages}>
+                  →
+                </button>
+
+              </div>
+            )}
           </div>
         </section>
       </main>
