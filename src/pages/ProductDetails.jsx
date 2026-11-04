@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import productDetails from "../data/productDetails";
 import "./ProductDetails.css";
+import { ShopKartContext } from "../context/ShopKartContext";
 
-function ProductDetails({ dispatch }) {
+function ProductDetails() {
+    const { dispatch } = useContext(ShopKartContext);
+    
     const { id } = useParams();
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { ShopKartContext } from "../context/ShopKartContext";
 
 import "./Product.css";
 
@@ -150,7 +151,8 @@ const products = [
   }
 ];
 
-function Product({ dispatch }) {
+function Product() {
+  const { dispatch } = useContext(ShopKartContext);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [maxPrice, setMaxPrice] = useState(20000);
   const [selectedRating, setSelectedRating] = useState(0);
